@@ -8,14 +8,22 @@ const express = require("express"),
   const departmentRoutes = require("./routes/departmentRoutes");
 const app = express();
 connectDB();
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL
-      ? process.env.CLIENT_URL.split(",").map((x) => x.trim())
-      : true,
-    credentials: true,
-  }),
-);
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://smart-college-complaint-system-pi.vercel.app",
+  "https://smart-college-complaint-system-qfaqsj1xd-stackforce.vercel.app"
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error("Not allowed by CORS"));
+  },
+  credentials: true
+}));
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
