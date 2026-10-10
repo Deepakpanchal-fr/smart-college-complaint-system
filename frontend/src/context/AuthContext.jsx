@@ -30,18 +30,11 @@ export function AuthProvider({ children }) {
     const r = await api.post("/auth/register", data);
     return r.data;
   };
-  const logout = async() => {
-    localStorage.removeItem("scc_user");
-    localStorage.removeItem("scc_token");
-    try {
-   const data =  await logout({email,password})
-   setuser(null)
-  
- } catch (error) {
-  console.log(error);
-  
- }
-  };
+const logout = async () => {
+  localStorage.removeItem("scc_user");
+  localStorage.removeItem("scc_token");
+  setUser(null);
+};
   useEffect(() => {
     const t = localStorage.getItem("scc_token");
     if (t)
